@@ -1,6 +1,6 @@
 <?php
 require_once 'inc/init.inc.php';
-//------------------------------------- COIFFURE PHP -------------------------------------//
+//------------------------------------- CONNEXION À LA BASE DE DONNÉES -------------------------------------//
 $host = 'mysql:host=localhost;dbname=iplay';
 $login = 'root';
 $password = '';
