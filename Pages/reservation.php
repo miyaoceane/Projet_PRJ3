@@ -76,4 +76,11 @@ ini_set("display_errors", 1);
         }
         ?>
     </div>
+    <h1>Bonjour</h1>
+
+<?php
+echo "Salut";
+?>
+
+<p>Fin</p>
 
