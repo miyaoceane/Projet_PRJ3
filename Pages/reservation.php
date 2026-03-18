@@ -9,7 +9,6 @@ ini_set("display_errors", 1);
             <select id="service" name="service" required>
 
                 <!-- liste des services proposés avec durée et prix -->
-
                 <?php
                 $services = $pdo -> query("SELECT nom FROM services");
                 while($service = $services->fetch()) { 
@@ -17,11 +16,6 @@ ini_set("display_errors", 1);
                  };
                 ?>
             </select>
-            <!-- <label for="date">Date et heure :</label>
-            <!-calendrier interractif --> 
-
-             <!-- <label for = "heure">Heure :</label>
-             Horraire disponible  -->
 
             <label for="nom">Nom :</label>
             <input type="text" id="nom" name="nom" required>
@@ -76,11 +70,5 @@ ini_set("display_errors", 1);
         }
         ?>
     </div>
-    <h1>Bonjour</h1>
 
-<?php
-echo "Salut";
-?>
-
-<p>Fin</p>
 
