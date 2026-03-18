@@ -20,9 +20,11 @@
     <main>
         <div service class="service">
         <h2>Services</h2>
-        <?php 
         
-        $services = $pdo -> query("SELECT nom, description, duree_minute,prix_euros, image FROM services")->fetchAll(PDO::FETCH_ASSOC);
+        <?php   
+        $stm = $pdo -> query("SELECT nom, description, duree_minute,prix_euros, image FROM services").
+        $services = $stm->fetchAll(PDO::FETCH_ASSOC);
+
         foreach($services as $service) {
             echo '<div class="service-item">';
             echo '<img src="' . $service['image'] . '" alt="' . $service['nom'] . '" class="service-image">';
