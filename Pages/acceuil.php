@@ -23,12 +23,11 @@
         
         <?php  
         include_once('Config/config.php'); 
-        $stm = $pdo -> query("SELECT nom, description, duree_minute, prix_euros, image FROM service").
+        $stm = $pdo -> query("SELECT nom, description, duree_minute, prix_euros FROM service");
         $services = $stm->fetchAll(PDO::FETCH_ASSOC);
 
         foreach($services as $service) {
             echo '<div class="service-item">';
-            echo '<img src="' . $service['image'] . '" alt="' . $service['nom'] . '" class="service-image">';
             echo '<h3>' . $service['nom'] . '</h3>';
             echo '<p>' . $service['description'] . '</p>';
             echo '<p>Durée : ' . $service['duree_minute'] . ' minutes</p>';
