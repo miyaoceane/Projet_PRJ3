@@ -1,7 +1,7 @@
 <?php
 
 //------------------------------------- CONNEXION À LA BASE DE DONNÉES -------------------------------------//
-$host = 'mysql:host=localhost;dbname=iplay';
+$host = 'mysql:host=localhost;dbname=coiffure';
 $login = 'root';
 $password = '';
 
