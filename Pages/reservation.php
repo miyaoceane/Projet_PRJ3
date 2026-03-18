@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
 </head>
-
-       
+<?php error_reporting(E_ALL);
+ini_set("display_errors", 1);
+?>
+ 
 <body>
     <div>
         <form action="" method="post" enctype="multipart/form-data" id="reservationForm">
@@ -25,7 +27,7 @@
             <label for="date">Date et heure :</label>
             <!-- <?echo ?> calendrier interractif -->
 
-             <label for = "heure">Heure :</label>//
+             <label for = "heure">Heure :</label>
              <!-- Horraire disponible --><?php echo '';?>
 
             <label for="nom">Nom :</label>
