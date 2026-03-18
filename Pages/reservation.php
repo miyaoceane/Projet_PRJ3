@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
 </head>
-<?php 
-  include_once('Config/config.php');
-?>
+
        
 <body>
     <div>
