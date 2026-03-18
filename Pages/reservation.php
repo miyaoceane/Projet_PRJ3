@@ -6,20 +6,26 @@ require_once('../Debug/debug.php');
 require_once('../INC/header.inc.php');
 
 ?>
+<?php
+echo'
 <div>
         <form action="" method="post" enctype="multipart/form-data" id="reservationForm">
         
            <div>
                 <label for="service">service:</label>
                 <select id="service" name="service" required>
+                '
+                ?>
 
                     <!-- liste des services proposés avec durée et prix -->
                     <?php
                     $services = $pdo -> query("SELECT nom FROM services");
                     while($service = $services->fetch()) { 
-                        echo'<option value ="'.$service['nom'].'">'.$service['nom'].'</option>';
+                        echo'<option value ="'.$service['nom'].'">'.$service['nom'].'</option><br>';
                     };
-                    ?>
+            
+    
+                    echo'
                 </select>
             </div>
 
@@ -47,8 +53,9 @@ require_once('../INC/header.inc.php');
                 <button type="submit">Confirmer</button>
             </div>
         </form>
-</div>
+</div>'
         <!-- validation côté serveur et enregistrement de la réservation dans la base de données -->
+        ?>
         <?php
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
