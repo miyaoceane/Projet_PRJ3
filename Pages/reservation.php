@@ -24,11 +24,11 @@ ini_set("display_errors", 1);
                  };
                 ?>
             </select>
-            <label for="date">Date et heure :</label>
-            <!-- <?echo ?> calendrier interractif -->
+            <!-- <label for="date">Date et heure :</label>
+            <!-calendrier interractif --> 
 
-             <label for = "heure">Heure :</label>
-             <!-- Horraire disponible --><?php echo '';?>
+             <!-- <label for = "heure">Heure :</label>
+             Horraire disponible  -->
 
             <label for="nom">Nom :</label>
             <input type="text" id="nom" name="nom" required>
