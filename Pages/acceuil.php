@@ -16,6 +16,9 @@
         <img src ="" alt= "photo du sallon">
         </div>  
     </header>
+    <?php 
+  require_once '../Config/config.php';
+?>
     <main>
         <div service class="service">
         <h2>Services</h2>
