@@ -22,7 +22,7 @@
         <h2>Services</h2>
         
         <?php  
-        include_once('../Config/config.php'); 
+        include_once('Config/config.php'); 
         $stm = $pdo -> query("SELECT nom, description, duree_minute, prix_euros FROM service");
         $services = $stm->fetchAll(PDO::FETCH_ASSOC);
 
