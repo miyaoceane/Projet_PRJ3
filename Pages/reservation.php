@@ -1,5 +1,10 @@
 <?php 
-include_once('../Config/config.php');
+require_once('Config/config.php');
+
+require_once('Debug/debug.php');
+
+require_once('INC/header.inc.php');
+
 ?>
     <div>
         <form action="" method="post" enctype="multipart/form-data" id="reservationForm">
@@ -68,5 +73,8 @@ include_once('../Config/config.php');
         }
         ?>
     </div>
+<?php
+require_once('INC/footer.inc.php');
+?>
 
 
