@@ -23,7 +23,7 @@
         
         <?php  
         include_once('Config/config.php'); 
-        $stm = $pdo -> query("SELECT nom, description, duree_minute,prix_euros, image FROM services").
+        $stm = $pdo -> query("SELECT nom, description, duree_minute, prix_euros, image FROM service").
         $services = $stm->fetchAll(PDO::FETCH_ASSOC);
 
         foreach($services as $service) {
