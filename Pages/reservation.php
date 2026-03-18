@@ -1,9 +1,9 @@
 <?php 
 require_once('../Config/config.php');
 
-require_once('Debug/debug.php');
+require_once('../Debug/debug.php');
 
-require_once('INC/header.inc.php');
+require_once('../INC/header.inc.php');
 
 ?>
     <div>
