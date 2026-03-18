@@ -1,8 +1,6 @@
-
-<?php error_reporting(E_ALL);
-ini_set("display_errors", 1);
+<?php 
+include_once('Config/config.php');
 ?>
- 
     <div>
         <form action="" method="post" enctype="multipart/form-data" id="reservationForm">
             <label for="service">service:</label>
