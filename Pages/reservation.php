@@ -6,7 +6,7 @@
     
 </head>
 <?php 
-  include '../Config/config.php';
+  require_once '../Config/config.php';
 ?>
        
 <body>
