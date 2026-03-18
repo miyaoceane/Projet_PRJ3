@@ -1,5 +1,5 @@
 <?php
-require_once 'inc/init.inc.php';
+
 //------------------------------------- CONNEXION À LA BASE DE DONNÉES -------------------------------------//
 $host = 'mysql:host=localhost;dbname=iplay';
 $login = 'root';
