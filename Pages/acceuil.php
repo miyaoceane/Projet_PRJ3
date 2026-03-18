@@ -16,14 +16,12 @@
         <img src ="" alt= "photo du sallon">
         </div>  
     </header>
-    <?php 
-  require_once ('Config/config.php');
-?>
+   
     <main>
         <div service class="service">
         <h2>Services</h2>
         <?php 
-        include '../Config/config.php';
+        
         $services = $pdo -> query("SELECT nom, description, duree_minute,prix_euros, image FROM services")->fetchAll(PDO::FETCH_ASSOC);
         foreach($services as $service) {
             echo '<div class="service-item">';
