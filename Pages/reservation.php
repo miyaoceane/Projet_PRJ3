@@ -28,7 +28,7 @@
             <!-- <?echo ?> calendrier interractif -->
 
              <label for = "heure">Heure :</label>//
-             <!-- Horraire disponible --><?php echo ?>
+             <!-- Horraire disponible --><?php echo '';?>
 
             <label for="nom">Nom :</label>
             <input type="text" id="nom" name="nom" required>
