@@ -8,31 +8,44 @@ require_once('../INC/header.inc.php');
 ?>
 <div>
         <form action="" method="post" enctype="multipart/form-data" id="reservationForm">
-            <label for="service">service:</label>
-            <select id="service" name="service" required>
+        
+           <div>
+                <label for="service">service:</label>
+                <select id="service" name="service" required>
 
-                <!-- liste des services proposés avec durée et prix -->
-                <?php
-                $services = $pdo -> query("SELECT nom FROM services");
-                while($service = $services->fetch()) { 
-                    echo'<option value ="'.$service['nom'].'">'.$service['nom'].'</option>';
-                 };
-                ?>
-            </select>
+                    <!-- liste des services proposés avec durée et prix -->
+                    <?php
+                    $services = $pdo -> query("SELECT nom FROM services");
+                    while($service = $services->fetch()) { 
+                        echo'<option value ="'.$service['nom'].'">'.$service['nom'].'</option>';
+                    };
+                    ?>
+                </select>
+            </div>
 
-            <label for="nom">Nom :</label>
-            <input type="text" id="nom" name="nom" required>
+            <div>
+                <label for="nom">Nom :</label>
+                <input type="text" id="nom" name="nom" required>
+            </div>
 
-            <label for="prenom">Prénom :</label>
-            <input type="text" id="prenom" name="prenom" required>
+            <div>
+                <label for="prenom">Prénom :</label>
+                <input type="text" id="prenom" name="prenom" required>
+            </div>
 
-            <label for="email">Email :</label>
-            <input type="email" id="email" name="email" required>
+            <div>
+                <label for="email">Email :</label>
+                <input type="email" id="email" name="email" required>
+            </div>
 
-            <label for="telephone">Téléphone :</label>
-            <input type="tel" id="telephone" name="telephone" required>
+            <div>
+                <label for="telephone">Téléphone :</label>
+                <input type="tel" id="telephone" name="telephone" required>
+            </div>
 
-            <button type="submit">Réserver</button>
+            <div>
+                <button type="submit">Confirmer</button>
+            </div>
         </form>
 </div>
         <!-- validation côté serveur et enregistrement de la réservation dans la base de données -->
