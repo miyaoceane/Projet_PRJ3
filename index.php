@@ -7,7 +7,5 @@ require_once('INC/header.inc.php');
 //
 require_once('Pages/acceuil.php');
 
-require_once('Pages/reservation.php');
-
 require_once('INC/footer.inc.php');
 ?>

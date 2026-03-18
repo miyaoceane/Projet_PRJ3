@@ -1,15 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-</head>
+
 <?php error_reporting(E_ALL);
 ini_set("display_errors", 1);
 ?>
  
-<body>
     <div>
         <form action="" method="post" enctype="multipart/form-data" id="reservationForm">
             <label for="service">service:</label>
@@ -84,6 +77,3 @@ ini_set("display_errors", 1);
         ?>
     </div>
 
-</body>
-  <script src="../assets/js/script.js"></script>
-</html>
