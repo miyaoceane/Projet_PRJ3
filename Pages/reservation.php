@@ -11,7 +11,7 @@
        
 <body>
     <div>
-        <form action="" method="post" enctype="multipart/form-data">
+        <form action="" method="post" enctype="multipart/form-data" id="reservationForm">
             <label for="service">service:</label>
             <select id="service" name="service" required>
 
@@ -72,8 +72,6 @@
                 $stmt = $pdo->prepare("INSERT INTO reservation (service_id, date_rdv, nom_client, email_client, telephone) VALUES (?, ?, ?, ?, ?)");
 
                 $stmt->execute([$id_service, $date, $nom, $email, $telephone]);
-
-                echo "<div>Réservation réussie !</div>";
 
                 echo'<div>Votre réservation pour le service : '.$service.' le '.$date.' à '.$heure.' a été enregistrée.</div>';
                 };
