@@ -1,5 +1,5 @@
 <?php 
-include_once('Config/config.php');
+include_once('../Config/config.php')
 ?>
     <div>
         <form action="" method="post" enctype="multipart/form-data" id="reservationForm">
