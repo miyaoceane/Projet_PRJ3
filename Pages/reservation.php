@@ -6,7 +6,7 @@ require_once('../Debug/debug.php');
 require_once('../INC/header.inc.php');
 
 ?>
-    <div>
+<div>
         <form action="" method="post" enctype="multipart/form-data" id="reservationForm">
             <label for="service">service:</label>
             <select id="service" name="service" required>
@@ -34,7 +34,7 @@ require_once('../INC/header.inc.php');
 
             <button type="submit">Réserver</button>
         </form>
-
+</div>
         <!-- validation côté serveur et enregistrement de la réservation dans la base de données -->
         <?php
 
@@ -72,9 +72,8 @@ require_once('../INC/header.inc.php');
 
         }
         ?>
-    </div>
 <?php
-require_once('INC/footer.inc.php');
+require_once('../INC/footer.inc.php');
 ?>
 
 
