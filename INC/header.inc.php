@@ -18,7 +18,7 @@
     <!-- Menu -->
     <div class="d-flex align-items-center gap-3">
       <a class="nav-link" href="#">Contact</a>
-      <a href="reservation.php" class="btn btn-outline-success">Réserver</a>
+      <a href="/Pages/reservation.php" class="btn btn-outline-success">Réserver</a>
     </div>
 
   </div>
