@@ -15,5 +15,5 @@ try {
 } catch (Exception $e) {
     die('🔴Le problème est survenu lors de la connexion à la base de données : ' . $e->getMessage());
 }
-$users= $pdo->query("SELECT pseudo FROM membre")->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
