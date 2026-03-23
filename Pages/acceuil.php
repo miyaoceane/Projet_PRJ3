@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
 </head>
+    <?php 
+    require_once ('Config/config.php');
+    ?>
 <body>
     <header>
         <div>
@@ -13,26 +16,33 @@
         <img src ="" alt= "photo du sallon">
         </div>  
     </header>
-    <?php 
-  require_once '../Config/config.php';
-?>
+   
     <main>
         <div service class="service">
         <h2>Services</h2>
-        <?php 
-        include '../Config/config.php';
-        $services = $pdo -> query("SELECT nom, description, duree_minute,prix_euros, image FROM services")->fetchAll(PDO::FETCH_ASSOC);
+
+        <div class="container-service">
+        <?php  
+        include_once('Config/config.php'); 
+        $stm = $pdo -> query("SELECT nom, description, duree_minute, prix_euros FROM service");
+        $services = $stm->fetchAll(PDO::FETCH_ASSOC);
+
         foreach($services as $service) {
-            echo '<div class="service-item">';
-            echo '<img src="' . $service['image'] . '" alt="' . $service['nom'] . '" class="service-image">';
+            echo '<div class="card" style="width: 18rem;">';
+            echo '<img src="..." class="card-img-top" alt="...">';
+            echo '<div class="card-body">';
             echo '<h3>' . $service['nom'] . '</h3>';
             echo '<p>' . $service['description'] . '</p>';
             echo '<p>Durée : ' . $service['duree_minute'] . ' minutes</p>';
             echo '<p>Prix : ' . $service['prix_euros'] . ' euros</p>';
             echo '</div>';
+            echo '</div>';
         }
         ?>
         </div>
+        </div>
+
+         
         <div class="avis">
         <h2>Avis</h2>
         <img src="" alt="space-comment" class="space-comment">
