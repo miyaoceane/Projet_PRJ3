@@ -7,116 +7,10 @@
     <title>Réservation</title>
 </head>
 <body>
-
-<?php
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-
-require_once('../Config/config.php');
-require_once('../INC/header.inc.php');
-
-
-$stmt_services = $pdo->query("SELECT id, nom, description, duree_minute, prix_euros FROM service ORDER BY nom");
-$services_list = $stmt_services->fetchAll();
-
-
-$stmt_resa = $pdo->query("SELECT date_rdv, heure_rdv FROM reservation WHERE statut != 'annule'");
-$reservations_prises = [];
-while ($r = $stmt_resa->fetch()) {
-    $heure = substr($r['heure_rdv'], 0, 5); 
-    $reservations_prises[] = $r['date_rdv'] . ' ' . $heure;
-}
-
-
-$stmt_dispos = $pdo->query("SELECT jour_semaine, heure_debut, heure_fin FROM disponibilites WHERE actif = 1");
-$horaires = [];
-while ($d = $stmt_dispos->fetch()) {
-    $j = $d['jour_semaine'];
-    if (!isset($horaires[$j])) $horaires[$j] = [];
-    $horaires[$j][] = [
-        'debut' => substr($d['heure_debut'], 0, 5),
-        'fin'   => substr($d['heure_fin'], 0, 5)
-    ];
-}
-
-
-$message      = '';
-$message_type = '';
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-    $service_id = intval($_POST['service_id'] ?? 0);
-    $date_rdv   = trim($_POST['date_rdv']   ?? '');
-    $heure_rdv  = trim($_POST['heure_rdv']  ?? '');
-    $nom        = trim($_POST['nom']        ?? '');
-    $prenom     = trim($_POST['prenom']     ?? '');
-    $email      = trim($_POST['email']      ?? '');
-    $telephone  = trim($_POST['telephone']  ?? '');
-
-    
-    if (!$service_id || !$date_rdv || !$heure_rdv || !$nom || !$prenom || !$email || !$telephone) {
-        $message      = 'Veuillez remplir tous les champs.';
-        $message_type = 'danger';
-
-    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $message      = "L'adresse email n'est pas valide.";
-        $message_type = 'danger';
-
-    } elseif (!preg_match('/^[0-9]{10}$/', $telephone)) {
-        $message      = 'Le numéro de téléphone doit contenir 10 chiffres.';
-        $message_type = 'danger';
-
-    } elseif (strtotime($date_rdv) < strtotime('today')) {
-        $message      = 'La date choisie est déjà passée.';
-        $message_type = 'danger';
-
-    } else {
-        
-        $check = $pdo->prepare(
-            "SELECT id FROM reservation
-             WHERE date_rdv = ? AND heure_rdv = ? AND statut != 'annule'"
-        );
-        $check->execute([$date_rdv, $heure_rdv]);
-
-        if ($check->fetch()) {
-            $message      = 'Ce créneau est déjà réservé. Veuillez en choisir un autre.';
-            $message_type = 'danger';
-        } else {
-            
-            $insert = $pdo->prepare(
-                "INSERT INTO reservation
-                 (service_id, date_rdv, heure_rdv, nom_client, prenom_client, email_client, telephone, statut)
-                 VALUES (?, ?, ?, ?, ?, ?, ?, 'attente')"
-            );
-            $insert->execute([$service_id, $date_rdv, $heure_rdv, $nom, $prenom, $email, $telephone]);
-
-           
-            $stmt_nom = $pdo->prepare("SELECT nom FROM service WHERE id = ?");
-            $stmt_nom->execute([$service_id]);
-            $nom_service = $stmt_nom->fetchColumn();
-
-            $message      = 'Réservation confirmée pour <strong>' . htmlspecialchars(trim($nom_service)) . '</strong>'
-                          . ' le <strong>' . date('d/m/Y', strtotime($date_rdv)) . '</strong>'
-                          . ' à <strong>' . substr($heure_rdv, 0, 5) . '</strong>.'
-                          . '<br>Un email de confirmation vous sera envoyé.';
-            $message_type = 'success';
-        }
-    }
-}
-?>
-
-<div class="container text-center mt-5">
+    <div class="container text-center mt-5">
     <h1>Réservation en ligne</h1>
     <p class="sous-titre">Choisissez votre service et votre créneau</p>
 </div>
-
-<?php if ($message): ?>
-<div class="container mt-3">
-    <div class="alert alert-<?= $message_type ?>">
-        <?= $message ?>
-    </div>
-</div>
-<?php endif; ?>
 
 <div class="container mt-4">
     <div class="row">
@@ -131,18 +25,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="mb-3">
                     <label for="service">Service :</label>
                     <select id="service" name="service_id">
-                        <option value="">Choisissez un service</option>
-                       <?php 
-                        foreach ($services_list as $s) {
-                            echo '<option value="' . htmlspecialchars($s['id']) . '"'
-                            . ' data-dur="' . htmlspecialchars($s['duree_minute']) . '"'
-                            . ' data-prix="' . htmlspecialchars($s['prix_euros']) . '">'
-                            . htmlspecialchars(trim($s['nom'])) . ' — '
-                            . htmlspecialchars($s['prix_euros']) . ' € — '
-                            . htmlspecialchars($s['duree_minute']) . ' min'
-                            . '</option>';
-                        }
-                        ?>
+                        <option value="">-- Choisir un service --</option>
+                        <?php foreach ($services_list as $s): ?>
+                            <option value="<?= $s['id'] ?>"
+                                    data-dur="<?= $s['duree_minute'] ?>"
+                                    data-prix="<?= $s['prix_euros'] ?>">
+                                <?= htmlspecialchars(trim($s['nom'])) ?> — <?= $s['prix_euros'] ?>€ — <?= $s['duree_minute'] ?> min
+                            </option>
+                        <?php endforeach; ?>
                     </select>
                     <span class="error-message" id="err-service"></span>
                 </div>
@@ -221,18 +111,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
 </div>
-
-<?php
-// Injecter les données BDD dans le JS
-$horaires_json     = json_encode($horaires);
-$reservations_json = json_encode($reservations_prises);
-?>
-<script>
-    var HORAIRES_bdd    = <?= $horaires_json ?>;
-    var RESERVATIONS_bdd = <?= $reservations_json ?>;
-</script>
-<script src="../asset/js/script.js"></script>
-
-<?php require_once('../INC/footer.inc.php'); ?>
-</body>
-</html>
