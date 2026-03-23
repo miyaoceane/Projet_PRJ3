@@ -3,7 +3,7 @@
 
 <footer>
     <div class="container">
-        <?= date('Y'); ?> - Tous droits réservés - sallon de coiffure
+       <?= date('Y'); ?> - Tous droits réservés - salon de coiffure</p>
     </div>
 </footer>
 
