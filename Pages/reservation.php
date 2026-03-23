@@ -1,138 +1,238 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link href="../asset/css/style.css" rel="stylesheet">
+    <title>Réservation</title>
 </head>
 <body>
+
+<?php
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
+require_once('../Config/config.php');
+require_once('../INC/header.inc.php');
+
+
+$stmt_services = $pdo->query("SELECT id, nom, description, duree_minute, prix_euros FROM service ORDER BY nom");
+$services_list = $stmt_services->fetchAll();
+
+
+$stmt_resa = $pdo->query("SELECT date_rdv, heure_rdv FROM reservation WHERE statut != 'annule'");
+$reservations_prises = [];
+while ($r = $stmt_resa->fetch()) {
+    $heure = substr($r['heure_rdv'], 0, 5); 
+    $reservations_prises[] = $r['date_rdv'] . ' ' . $heure;
+}
+
+
+$stmt_dispos = $pdo->query("SELECT jour_semaine, heure_debut, heure_fin FROM disponibilites WHERE actif = 1");
+$horaires = [];
+while ($d = $stmt_dispos->fetch()) {
+    $j = $d['jour_semaine'];
+    if (!isset($horaires[$j])) $horaires[$j] = [];
+    $horaires[$j][] = [
+        'debut' => substr($d['heure_debut'], 0, 5),
+        'fin'   => substr($d['heure_fin'], 0, 5)
+    ];
+}
+
+
+$message      = '';
+$message_type = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    $service_id = intval($_POST['service_id'] ?? 0);
+    $date_rdv   = trim($_POST['date_rdv']   ?? '');
+    $heure_rdv  = trim($_POST['heure_rdv']  ?? '');
+    $nom        = trim($_POST['nom']        ?? '');
+    $prenom     = trim($_POST['prenom']     ?? '');
+    $email      = trim($_POST['email']      ?? '');
+    $telephone  = trim($_POST['telephone']  ?? '');
+
+    
+    if (!$service_id || !$date_rdv || !$heure_rdv || !$nom || !$prenom || !$email || !$telephone) {
+        $message      = 'Veuillez remplir tous les champs.';
+        $message_type = 'danger';
+
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $message      = "L'adresse email n'est pas valide.";
+        $message_type = 'danger';
+
+    } elseif (!preg_match('/^[0-9]{10}$/', $telephone)) {
+        $message      = 'Le numéro de téléphone doit contenir 10 chiffres.';
+        $message_type = 'danger';
+
+    } elseif (strtotime($date_rdv) < strtotime('today')) {
+        $message      = 'La date choisie est déjà passée.';
+        $message_type = 'danger';
+
+    } else {
         
-    <?php
-    setlocale(LC_TIME, 'fr_FR.UTF-8');
-    ini_set('display_errors', 1);
-    ini_set('display_startup_errors', 1);
-    error_reporting(E_ALL); 
+        $check = $pdo->prepare(
+            "SELECT id FROM reservation
+             WHERE date_rdv = ? AND heure_rdv = ? AND statut != 'annule'"
+        );
+        $check->execute([$date_rdv, $heure_rdv]);
 
-    require_once('../Config/config.php');
-    require_once('../INC/header.inc.php');
-    $services = $pdo -> query("SELECT nom, prix_euros ,duree_minute FROM service");
-    $today = date('d');
-    $jour = $pdo->query("SELECT jour_semaine FROM disponibilites");
-     ?>
+        if ($check->fetch()) {
+            $message      = 'Ce créneau est déjà réservé. Veuillez en choisir un autre.';
+            $message_type = 'danger';
+        } else {
+            
+            $insert = $pdo->prepare(
+                "INSERT INTO reservation
+                 (service_id, date_rdv, heure_rdv, nom_client, prenom_client, email_client, telephone, statut)
+                 VALUES (?, ?, ?, ?, ?, ?, ?, 'attente')"
+            );
+            $insert->execute([$service_id, $date_rdv, $heure_rdv, $nom, $prenom, $email, $telephone]);
 
-     <div class="container text-center mt-5">
-     <h1>Réservation</h1>
-     </div>
+           
+            $stmt_nom = $pdo->prepare("SELECT nom FROM service WHERE id = ?");
+            $stmt_nom->execute([$service_id]);
+            $nom_service = $stmt_nom->fetchColumn();
 
-     <div class="container mt-5">
-        <div class="row">
-            <div class="col-md-8 mx-auto">
-                <form action="" method="post" enctype="multipart/form-data" id="reservationForm">
-                
-                 <div class="mb-3">
-                    <label for="service">services:</label>
-                    <select id="service" name="service">
-                        <!-- liste des services proposés avec durée et prix --> 
-                         <?php
-                        while($service = $services->fetch()) { 
-                            echo'<option value ="'.$service['nom'].'">'.$service['nom'].'   '.$service['prix_euros'].'€    '.$service['duree_minute'].' min </option>';
-                        };
-                        ?>                  
-                    </select>
-                </div>
-                <div id='calendrier'>
-                    <?php 
-                       
-                    ?>
-                 <table>
-                    <tr>
-                        <?php
-                        while($jours = $jour->fetch()){
-                          echo  '<th>'.strftime('%A', strtotime('+1 day')).'</th>';
+            $message      = 'Réservation confirmée pour <strong>' . htmlspecialchars(trim($nom_service)) . '</strong>'
+                          . ' le <strong>' . date('d/m/Y', strtotime($date_rdv)) . '</strong>'
+                          . ' à <strong>' . substr($heure_rdv, 0, 5) . '</strong>.'
+                          . '<br>Un email de confirmation vous sera envoyé.';
+            $message_type = 'success';
+        }
+    }
+}
+?>
+
+<div class="container text-center mt-5">
+    <h1>Réservation en ligne</h1>
+    <p class="sous-titre">Choisissez votre service et votre créneau</p>
+</div>
+
+<?php if ($message): ?>
+<div class="container mt-3">
+    <div class="alert alert-<?= $message_type ?>">
+        <?= $message ?>
+    </div>
+</div>
+<?php endif; ?>
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <form action="reservation.php" method="post" id="reservationForm">
+
+                <!-- Champs cachés remplis par le JS quand l'utilisateur clique sur un créneau -->
+                <input type="hidden" id="date_rdv"  name="date_rdv"  value="">
+                <input type="hidden" id="heure_rdv" name="heure_rdv" value="">
+
+                <!-- Sélection du service -->
+                <div class="mb-3">
+                    <label for="service">Service :</label>
+                    <select id="service" name="service_id">
+                        <option value="">Choisissez un service</option>
+                       <?php 
+                        foreach ($services_list as $s) {
+                            echo '<option value="' . htmlspecialchars($s['id']) . '"'
+                            . ' data-dur="' . htmlspecialchars($s['duree_minute']) . '"'
+                            . ' data-prix="' . htmlspecialchars($s['prix_euros']) . '">'
+                            . htmlspecialchars(trim($s['nom'])) . ' — '
+                            . htmlspecialchars($s['prix_euros']) . ' € — '
+                            . htmlspecialchars($s['duree_minute']) . ' min'
+                            . '</option>';
                         }
-                    ?>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                </table>
-                <div class="mb-3">
-                    <label for="nom">Nom :</label>
-                    <input type="text" id="nom" name="nom" >
+                        ?>
+                    </select>
+                    <span class="error-message" id="err-service"></span>
                 </div>
 
-                <div class="mb-3">
-                    <label for="prenom">Prénom :</label>
-                    <input type="text" id="prenom" name="prenom">
+                <!-- Carte info service remplie par le JS -->
+                <div id="info-card" class="info-card">
+                    <p>Sélectionnez un service pour voir les disponibilités</p>
                 </div>
 
-                <div class="mb-3">
-                    <label for="email">Email :</label>
-                    <input type="text" id="email" name="email">
+                <!-- Calendrier -->
+                <div id="cal-section" style="display:none">
+                    <h2>Calendrier</h2>
+                    <div class="cal-header">
+                        <button type="button" id="prev-btn">←</button>
+                        <span id="cal-title"></span>
+                        <button type="button" id="next-btn">→</button>
+                    </div>
+                    <div class="cal-jours">
+                        <span>Lun</span><span>Mar</span><span>Mer</span>
+                        <span>Jeu</span><span>Ven</span><span>Sam</span><span>Dim</span>
+                    </div>
+                    <div id="cal-grid" class="cal-grid"></div>
+                    <span class="error-message" id="err-date"></span>
                 </div>
 
-                <div class="mb-3">
-                    <label for="telephone">Téléphone :</label>
-                    <input type="tel" id="telephone" name="telephone">
+                <!-- Créneaux horaires -->
+                <div id="slots-section" style="display:none">
+                    <p id="slots-label"></p>
+                    <div id="slots-grid" class="slots-grid"></div>
+                    <span class="error-message" id="err-slot"></span>
                 </div>
 
-                <div class="mb-3 text-center mt-5">
-                    <button type="submit" class="btn btn-primary btn-lg">Confirmer</button>
+                <!-- Récapitulatif créneau sélectionné -->
+                <div id="confirm-bar" style="display:none">
+                    <p id="confirm-info"></p>
                 </div>
+
+                <!-- Formulaire client -->
+                <div id="form-client" style="display:none">
+                    <h2>Vos informations</h2>
+
+                    <div class="mb-3">
+                        <label for="nom">Nom :</label>
+                        <input type="text" id="nom" name="nom"
+                               value="<?= htmlspecialchars($_POST['nom'] ?? '') ?>">
+                        <span class="error-message" id="err-nom"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="prenom">Prénom :</label>
+                        <input type="text" id="prenom" name="prenom"
+                               value="<?= htmlspecialchars($_POST['prenom'] ?? '') ?>">
+                        <span class="error-message" id="err-prenom"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email">Email :</label>
+                        <input type="email" id="email" name="email"
+                               value="<?= htmlspecialchars($_POST['email'] ?? '') ?>">
+                        <span class="error-message" id="err-email"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="telephone">Téléphone :</label>
+                        <input type="tel" id="telephone" name="telephone"
+                               value="<?= htmlspecialchars($_POST['telephone'] ?? '') ?>">
+                        <span class="error-message" id="err-tel"></span>
+                    </div>
+
+                    <div class="mb-3 text-center mt-4">
+                        <button type="submit" class="btn-confirmer">Confirmer la réservation</button>
+                    </div>
+                </div>
+
             </form>
         </div>
     </div>
 </div>
 
-    <?php
-    
-            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+<?php
+// Injecter les données BDD dans le JS
+$horaires_json     = json_encode($horaires);
+$reservations_json = json_encode($reservations_prises);
+?>
+<script>
+    var HORAIRES_bdd    = <?= $horaires_json ?>;
+    var RESERVATIONS_bdd = <?= $reservations_json ?>;
+</script>
+<script src="../asset/js/script.js"></script>
 
-                $service = $_POST['service'];
-                $nom = $_POST['nom'];
-                $prenom = $_POST['prenom'];
-                $email = $_POST['email'];
-                $telephone = $_POST['telephone'];
-
-                // Validation des données 
-
-                if (!empty($service) && !empty($nom) && !empty($telephone) && !empty($email)) {
-                    
-                    if(filter_var($email, FILTER_VALIDATE_EMAIL) == false){
-                        echo'<div class="alert alert-error" >⚠ Attention, le format de l\'adresse email n\'est pas correct. Veuillez renseigner une adresse email valide.</div>';
-
-                    }else if(preg_match("/^[0-9]{10}$/", $telephone) == false){
-                        echo'<div class="alert alert-error">⚠ Attention, le format du numéro de téléphone n\'est pas correct. Veuillez renseigner un numéro de téléphone valide (10 chiffres).</div>';
-                    } else {
-            
-                    // Enregistrement de la réservation dans la base de données
-                    $stmt1 = $pdo->prepare("SELECT id FROM service WHERE nom = ?");
-                    $stmt1->execute([$service]);
-                    $id_service = $stmt1->fetchColumn();
-
-                    $stmt2 = $pdo->prepare("INSERT INTO reservation (service_id, nom_client, email_client, telephone) VALUES (?, ?, ?, ?)");
-
-                    $stmt2->execute([$id_service, $nom, $email, $telephone]);
-
-                    echo'<div class="alert alert-success">Votre réservation pour le service : '.$service.'a été enregistrée.</div>';
-                    };
-            
-                } else {
-                    echo '<div class="alert alert-danger">Veuillez remplir tous les champs!</div>';
-                };
-
-            }
-        
-        require_once('../INC/footer.inc.php');
-    ?>
-
-    <script src="../asset/js/script.js"></script>
+<?php require_once('../INC/footer.inc.php'); ?>
 </body>
 </html>
