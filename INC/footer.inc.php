@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 </div>
 </section>
 
@@ -15,3 +17,4 @@
 
 </body>
 </html>
+>>>>>>> b7eceea223cf270a1b319591076b53dd4bfb2e6a
