@@ -6,7 +6,7 @@
     <link href="../asset/css/style.css" rel="stylesheet">
     <title>Réservation</title>
 </head>
-<body>
+<body class= "container>
 
 <?php
 ini_set('display_errors', 1);
@@ -20,9 +20,9 @@ $stmt_services = $pdo->query("SELECT id, nom, description, duree_minute, prix_eu
 $services_list = $stmt_services->fetchAll();
 
 
-$stmt_resa = $pdo->query("SELECT date_rdv, heure_rdv FROM reservation WHERE statut != 'annule'");
+$stmt_res = $pdo->query("SELECT date_rdv, heure_rdv FROM reservation WHERE statut != 'annule'");
 $reservations_prises = [];
-while ($r = $stmt_resa->fetch()) {
+while ($r = $stmt_res->fetch()) {
     $heure = substr($r['heure_rdv'], 0, 5); 
     $reservations_prises[] = $r['date_rdv'] . ' ' . $heure;
 }
@@ -223,7 +223,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </div>
 
 <?php
-// Injecter les données BDD dans le JS
+// conversion des donnés php en js en passant par le format JSON 
 $horaires_json     = json_encode($horaires);
 $reservations_json = json_encode($reservations_prises);
 ?>
