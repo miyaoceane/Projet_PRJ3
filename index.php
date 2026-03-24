@@ -9,3 +9,6 @@ require_once('Pages/reservation.php');
 
 require_once('INC/footer.inc.php');
 ?>
+
+
+ 
