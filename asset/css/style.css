@@ -1,0 +1,451 @@
+@import url('https://fonts.googleapis.com/css2?family=Carattere&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Outfit:wght@100..900&display=swap');
+
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: #ffffff;
+    color: #000000;
+    margin: 0 ;
+    padding: 0;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+h1, h2 {
+    color: #2c2c2c;
+}
+
+.sous-titre {
+    color: #777;
+    margin-top: -10px;
+}
+
+
+.alert {
+    padding: 12px 16px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+.alert-success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.alert-danger {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+
+form .mb-3 {
+    margin-bottom: 16px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+select {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: #bfaa6b;
+}
+
+.error-message {
+    color: #922d21;
+    font-size: 12px;
+    display: block;
+    margin-top: 4px;
+}
+
+
+.info-card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 14px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: #555;
+}
+
+.info-card p {
+    margin: 4px 0;
+}
+
+
+#cal-section {
+    margin-bottom: 20px;
+}
+
+.cal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.cal-header span {
+    font-weight: bold;
+    font-size: 16px;
+    text-transform: capitalize;
+}
+
+.cal-header button {
+    background: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 5px 12px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.cal-header button:hover {
+    background: #eee;
+}
+
+.cal-jours {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    font-size: 12px;
+    font-weight: bold;
+    color: #888;
+    margin-bottom: 6px;
+}
+
+.cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+}
+
+.day-btn {
+    width: 100%;
+    aspect-ratio: 1;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: #fff;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.day-btn.empty {
+    border: none;
+    background: transparent;
+    cursor: default;
+}
+
+.day-btn.past {
+    color: #bbb;
+    cursor: default;
+    background: #f9f9f9;
+}
+
+.day-btn.closed {
+    color: #ccc;
+    background: #f9f9f9;
+    cursor: default;
+    text-decoration: line-through;
+}
+
+.day-btn.available {
+    border-color: #ddd7d7;
+    color: #ddd7d7;
+    font-weight: bold;
+}
+
+.day-btn.available:hover {
+    background: #ddd7d7;
+    color: #fff;
+}
+
+.day-btn.today {
+    border-color: #e67e22;
+    color: #e67e22;
+}
+
+.day-btn.complet {
+    background: #fdecea;
+    color: #aaa;
+    cursor: not-allowed;
+}
+
+.day-btn.selected {
+    background: #ddd7d7;
+    color: #fff;
+    border-color: #ddd7d7;
+}
+
+
+#slots-section {
+    margin-bottom: 20px;
+}
+
+#slots-label {
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-transform: capitalize;
+}
+
+.slots-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.slot-btn {
+    padding: 8px 14px;
+    border: 1px solid #ddd7d7;
+    border-radius: 5px;
+    background: #fff;
+    color: #ddd7d7;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.slot-btn:hover {
+    background: #ddd7d7;
+    color: #fff;
+}
+
+.slot-btn.taken {
+    border-color: #ccc;
+    color: #ccc;
+    background: #f5f5f5;
+    cursor: not-allowed;
+}
+
+.slot-btn.selected-slot {
+    background: #ddd7d7;
+    color: #fff;
+}
+
+
+#confirm-bar {
+    background: #eaf4ff;
+    border: 1px solid #b3d7ff;
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: #333;
+}
+
+
+.btn-confirmer {
+    background: #ddd7d7;
+    color: #fff;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 6px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-confirmer:hover {
+    background: #6b702f;
+}
+
+@media (max-width: 600px) {
+    .day-btn {
+        font-size: 11px;
+    }
+    .slot-btn {
+        font-size: 12px;
+        padding: 6px 10px;
+    }
+}
+
+.btn.btn-outline-success {
+    color: #ffffff;
+    border-color: #000000;
+    background: #0a0909;
+
+}
+.btn.btn-outline-success:hover {
+    background: #6c5239;
+    color: #fff;
+    border-color: #736b64;
+}
+
+.container-service {
+    display: flex;          /* aligne les cards sur une seule ligne */
+    overflow-x: auto;       /* active le défilement horizontal */
+    gap: 20px;              /* espace entre les cards */
+    padding: 20px;
+}
+
+.container-service .card {
+    min-width: 280px;       /* empêche les cards de devenir trop fines */
+    flex-shrink: 0;         /* important : ne pas réduire les cards */
+}
+
+.container-service .card img {
+    height: 200px;          /* hauteur fixe pour les images */
+    object-fit: cover;      /* conserve le ratio et crop si nécessaire */
+}
+
+
+.header-content {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* espace très petit entre image et texte */
+}
+
+.header-content img {
+    width: 570px;
+    height: 364px;
+    object-fit: cover;
+    border-radius: 1px;
+}
+
+.header-text {
+    margin: 0;
+}
+
+h1 {
+    font-size: 64px;
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    color:#000000
+}
+
+h2 {
+    font-size: 48px;
+    font-family: 'Inter', sans-serif;
+    color: #000000;
+    font-weight: 600;
+}
+
+h3 {
+    text-transform: uppercase;
+    font-size: 24px;
+    font-family: 'Inter', sans-serif;
+    color: #000000;
+    font-weight: medium;   
+}
+
+p{
+    font-size: 16px;
+    font-family: 'Inter', sans-serif;
+    font-weight: light;
+}
+#description {
+    font-size: 24px;
+    font-family: 'Inter', sans-serif;
+    font-weight: light;
+    color:#3f3f3f;
+    border-style: none;
+    border-width: 2px;
+    border-color: #000000 ;
+    border-radius:10px;
+    padding: 5px;
+}
+
+.card {
+    width: 520px;
+    height: 450px;
+    display: flex;
+    flex-direction: column; 
+    align-items: center;    
+    text-align: center; 
+     
+}
+.card:hover{
+    width: 550px;
+    background-color:#ddd7d7 ;
+    border-color:#d2cfd0;
+    display: inline-block;          /* pour que transform fonctionne bien */
+    animation: slidehigh 1s ease-out forwards;
+}
+@keyframes slidehigh{
+     from {
+        transform: translateY(9px);  /* départ légèrement en bas */
+    }
+    to {
+        transform: translateY(0);    /* position finale normale */
+    }
+}
+
+.card img {
+
+    max-width: 100%; 
+    height: auto;
+    ;
+}
+.acceuil{
+    margin: 20px;
+}
+.header-text {
+transform: translateX(100%);      /* départ à droite */
+    animation: slideLeft 1.5s ease-out forwards; /* durée un peu plus longue pour ralentir */
+}
+
+@keyframes slideLeft {
+    to {
+        transform: translateX(0);     /* position finale */
+    }
+}
+
+.space-comment {
+    width: 790px;
+    height: 600px;
+    margin: 20px 0;
+    border-radius:50%;
+}
+
+.comment{
+    width: 550px;
+    height: 100px;
+    background: #ddd7d7;
+    margin: 15px ;
+    border-radius: 15px;
+    padding :10px
+}
+.comment:hover {
+    background: #736b64;
+    color: #fff;
+    transition: background 0.3s, color 0.3s;
+}
+
+.container-avis {
+    display: flex;             /* active le mode flex */
+    justify-content: space-between; /* espace entre les éléments */
+    align-items: center;       /* aligne verticalement si éléments de hauteur différente */
+    gap : 25px;
+    background-color: #ebe8e8;
+    width: 1450px ;
+    border-radius: 80px ;
+}
+
+.footer-container{
+          display: flex;             /* active le mode flex */
+         justify-content: space-between; /* espace entre les éléments */
+         align-items: center;      
+}

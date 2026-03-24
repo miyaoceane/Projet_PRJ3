@@ -1,11 +1,17 @@
-<<<<<<< HEAD
-=======
 </div>
 </section>
 
 <footer>
-    <div class="container">
-       <?= date('Y'); ?> - Tous droits réservés - salon de coiffure</p>
+    <div class="footer-container">
+        <div>
+            <p>COIFFURE PRO </p>
+             <?= date('Y'); ?>
+        </div>
+        <div>
+            <p>ADRESSE : 41 avenue allan Turpin</p>
+            <p>TELEPHONE: 0795236412</p>
+            <p>EMAIL:coiffurepro@gmail.com</p>
+        </div>
     </div>
 </footer>
 
@@ -17,4 +23,3 @@
 
 </body>
 </html>
->>>>>>> b7eceea223cf270a1b319591076b53dd4bfb2e6a
