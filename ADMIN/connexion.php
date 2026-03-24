@@ -1,7 +1,8 @@
 <?php
 session_start();
 require_once ("../Config/config.php");
-
+$id='';
+$password='';
 
 define("ID_ADMIN", "coiffeur123");
 define("PASSWORD_ADMIN", password_hash("laetitia06", PASSWORD_DEFAULT));
@@ -15,6 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['admin'] = $id;
         header("Location: Admin.php");
         exit();
+
     } else {
         $erreur = "identifiant ou mot de passe incorrect";
     }
@@ -42,16 +44,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="container mt-5">
         <div class="row">
             <div class="col-md-8 mx-auto">
+        
                 <form action="connexion.php" method="post">
                     <div class="mb-3">
                         <label for="id" class="form-label">Identifiant</label>
                         <input type="text" class="form-control" name="id" id="id" placeholder="Veuillez entrer votre indentifiant"  title="caractère autorisés : a-zA-Z0-9-_." required="required">
-                        <span class="error-message" id="err-email"></span>
+                        <span class="error-message"><?php if (!empty($erreur)) echo $erreur; ?></span>
                     </div>
                     <div class="mb-3">
                         <label for="mdp" class="form-label">Mot de Passe</label>
                         <input type="password" class="form-control" name="mdp" id="mdp" placeholder="🔑 Veuillez entrer votre mot de passe">
-                        <span class="error-message" id="err-email"></span>
+                        <span class="error-message"><?php if (!empty($erreur)) echo $erreur; ?></span>
                     </div>
                     </div>
                     <div class="mb-3 text-center mt-5">

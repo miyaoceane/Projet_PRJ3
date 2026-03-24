@@ -135,7 +135,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <div class="container mt-4">
     <div class="row">
         <div class="col-md-8 mx-auto">
-            <form action="reservation.php" method="post" id="reservationForm">
+            <form action="reservation.php" method="post" id="reservationForm" novalidate>
 
                 <!-- Champs cachés remplis par le JS quand l'utilisateur clique sur un créneau -->
                 <input type="hidden" id="date_rdv"  name="date_rdv"  value="">

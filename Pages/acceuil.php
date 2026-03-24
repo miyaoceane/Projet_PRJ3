@@ -3,13 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link href=asset/css/style.css rel="stylesheet">
 </head>
     <?php 
     require_once ('Config/config.php');
+    $dispo = $pdo->query("SELECT * FROM disponibilites ORDER BY jour_semaine")->fetchAll(PDO::FETCH_ASSOC);
+
+    $jours = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
     ?>
 <body>
-    <header class="acceuil">
+<header>
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    
+    <!-- Nom du salon de coiffure -->
+    <a class="navbar-brand" href="#">COIFFURE PRO</a>
+
+    <!-- Menu -->
+    <div class="d-flex align-items-center gap-3">
+      <a class="nav-link" href="#">services</a>
+      <a class="nav-link" href="#">avis</a>
+      <a class="nav-link" href="#">Contact</a>
+      <a href="./Pages/reservation.php" class="btn btn-outline-success">Réserver</a>
+    </div>
+
+  </div>
+</nav>
+</header>
+    <div class="acceuil">
         <div class='header-content'>
         <img class="card-img-top" src ="https://coiffurealimage.fr/wp-content/uploads/2018/03/img-salon-10.jpg" alt= "photo du sallon">
         <div class ="header-text">
@@ -17,9 +39,10 @@
             <h2 id="description">Venez découvrir notre salon de coiffure, un espace moderne et convivial dédié à votre style.</h2>
         </div>
         </div>  
-    </header>
-
+</div>
+   
     <main class="acceuil"> 
+        
         <div service class="service">
         <h2 >SERVICES</h2>
 
@@ -45,6 +68,26 @@
         </div>
         <br>
         <br>
+        <div class="container">
+        <h2 id = "dispo">DISPONIBILITÉS</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Jour</th>
+                    <th>Ouverture</th>
+                    <th>Fermeture</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($dispo as $d): ?>
+                <tr class="<?= $d['actif'] ? '' : 'table-danger' ?>">
+                    <td><?= $jours[$d['jour_semaine']] ?></td>
+                    <td><?= $d['actif'] ? substr($d['heure_debut'], 0, 5) : '—' ?></td>
+                    <td><?= $d['actif'] ? substr($d['heure_fin'],   0, 5) : '—' ?></td>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+        </div>
          
         <div class="avis">
         <h2>AVIS</h2>
