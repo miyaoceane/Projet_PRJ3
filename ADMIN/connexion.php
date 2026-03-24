@@ -1,61 +1,69 @@
 <?php
-require_once 'inc/init.inc.php';
-//------------------------------------- TRAITEMENT PHP -------------------------------------//
-$host = 'mysql:host=localhost;dbname=iplay';
-$login = 'root';
-$password = '';
+session_start();
+require_once ("../Config/config.php");
 
-$options = array(
-    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-    PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'
-);
 
-try {
-    $pdo = new PDO($host, $login, $password, $options);
-} catch (Exception $e) {
-    die('🔴Le problème est survenu lors de la connexion à la base de données : ' . $e->getMessage());
-}
-$users= $pdo->query("SELECT pseudo FROM membre")->fetchAll(PDO::FETCH_ASSOC);
-   
-    if(in_array($_POST['pseudo'], array_column($users, 'pseudo')))
-    {
-       echo'Vous êtes reconnu';
+define("ID_ADMIN", "coiffeur123");
+define("PASSWORD_ADMIN", password_hash("laetitia06", PASSWORD_DEFAULT));
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    $id = $_POST['id'];
+    $password = $_POST['mdp'];
+
+    if ($id === ID_ADMIN && password_verify($password, PASSWORD_ADMIN)) {
+        $_SESSION['admin'] = $id;
+        header("Location: Admin.php");
+        exit();
     } else {
-        echo'Vous n\'êtes pas reconnu';
-        
-    };
-
-
-//------------------------------------- AFFICHAGE HTML -------------------------------------//
-require_once 'inc/haut.inc.php';
+        $erreur = "identifiant ou mot de passe incorrect";
+    }
+}
 ?>
-
-<div class="container text-center mt-5">
-    <h2>Connexion</h2>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Connexion Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link href="../asset/css/style.css" rel="stylesheet">
+</head>
+<body>
+<header>
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">COIFFURE PRO</a>
+  </div>
+</nav>
+</header>
+<main id ="connexion" class= "container">
+    <h1>Connexion</h1>
+    <h3>Bienvenue!</h3>
 </div>
-<?=  $contenu; ?>
-
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-md-8 mx-auto">
-            <form action="" method="post">
-                <div class="mb-3">
-                    <label for="pseudo" class="form-label">Pseudo</label>
-                    <input type="text" class="form-control" name="pseudo" id="pseudo" placeholder="🐱‍👤 Veuillez choisir un pseudo" pattern="[a-zA-Z0-9-_.]{1,30}" title="caractère autorisés : a-zA-Z0-9-_." required="required">
-                </div>
-                <div class="mb-3">
-                    <label for="mdp" class="form-label">Mot de Passe</label>
-                    <input type="password" class="form-control" name="mdp" id="mdp" placeholder="🔑 Veuillez choisir un mot de passe">
-                </div>
-                </div>
-                <div class="mb-3 text-center mt-5">
-                    <a href="Pages/reservation.php" class="btn btn-outline-success">se connecter</a>
-                </div>
-                
-            </form>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <form action="connexion.php" method="post">
+                    <div class="mb-3">
+                        <label for="id" class="form-label">Identifiant</label>
+                        <input type="text" class="form-control" name="id" id="id" placeholder="Veuillez entrer votre indentifiant"  title="caractère autorisés : a-zA-Z0-9-_." required="required">
+                        <span class="error-message" id="err-email"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label for="mdp" class="form-label">Mot de Passe</label>
+                        <input type="password" class="form-control" name="mdp" id="mdp" placeholder="🔑 Veuillez entrer votre mot de passe">
+                        <span class="error-message" id="err-email"></span>
+                    </div>
+                    </div>
+                    <div class="mb-3 text-center mt-5">
+                        <button class="btn-confirmer"type ='submit'>se connecter</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-</div>
+    <script src="../asset/js/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+</body>
+</html>
 
-<?php
-require_once 'inc/bas.inc.php';
+
