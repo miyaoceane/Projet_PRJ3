@@ -12,14 +12,6 @@
     <p class="sous-titre">Choisissez votre service et votre créneau</p>
 </div>
 
-<?php if ($message): ?>
-<div class="container mt-3">
-    <div class="alert alert-<?= $message_type ?>">
-        <?= $message ?>
-    </div>
-</div>
-<?php endif; ?>
-
 <div class="container mt-4">
     <div class="row">
         <div class="col-md-8 mx-auto">

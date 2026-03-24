@@ -1,7 +1,7 @@
 <?php
-require_once 'inc/init.inc.php';
+
 //------------------------------------- CONNEXION À LA BASE DE DONNÉES -------------------------------------//
-$host = 'mysql:host=localhost;dbname=iplay';
+$host = 'mysql:host=localhost;dbname=coiffure';
 $login = 'root';
 $password = '';
 
@@ -15,5 +15,5 @@ try {
 } catch (Exception $e) {
     die('🔴Le problème est survenu lors de la connexion à la base de données : ' . $e->getMessage());
 }
-$users= $pdo->query("SELECT pseudo FROM membre")->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
