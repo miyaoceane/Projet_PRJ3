@@ -173,13 +173,13 @@ input:focus, select:focus {
 }
 
 .day-btn.available {
-    border-color: #ddd7d7;
-    color: #ddd7d7;
+    border-color: #736b64;
+    color: #736b64;
     font-weight: bold;
 }
 
 .day-btn.available:hover {
-    background: #ddd7d7;
+    background: #736b64;
     color: #fff;
 }
 
@@ -195,9 +195,9 @@ input:focus, select:focus {
 }
 
 .day-btn.selected {
-    background: #ddd7d7;
+    background: #736b64;
     color: #fff;
-    border-color: #ddd7d7;
+    border-color: #736b64;
 }
 
 
@@ -219,17 +219,17 @@ input:focus, select:focus {
 
 .slot-btn {
     padding: 8px 14px;
-    border: 1px solid #ddd7d7;
+    border: 1px solid #736b64;
     border-radius: 5px;
     background: #fff;
-    color: #ddd7d7;
+    color: #736b64;
     font-size: 13px;
     cursor: pointer;
     transition: background 0.2s, color 0.2s;
 }
 
 .slot-btn:hover {
-    background: #ddd7d7;
+    background: #736b64;
     color: #fff;
 }
 
@@ -241,7 +241,7 @@ input:focus, select:focus {
 }
 
 .slot-btn.selected-slot {
-    background: #ddd7d7;
+    background: #736b64;
     color: #fff;
 }
 
@@ -258,7 +258,7 @@ input:focus, select:focus {
 
 
 .btn-confirmer {
-    background: #ddd7d7;
+    background: #000000;
     color: #fff;
     border: none;
     padding: 12px 30px;
@@ -269,7 +269,7 @@ input:focus, select:focus {
 }
 
 .btn-confirmer:hover {
-    background: #6b702f;
+    background: #736b64;
 }
 
 @media (max-width: 600px) {
@@ -289,7 +289,7 @@ input:focus, select:focus {
 
 }
 .btn.btn-outline-success:hover {
-    background: #6c5239;
+    background:  #736b64;
     color: #fff;
     border-color: #736b64;
 }
@@ -449,3 +449,30 @@ transform: translateX(100%);      /* départ à droite */
          justify-content: space-between; /* espace entre les éléments */
          align-items: center;      
 }
+
+
+/* page de connexion et page Admin */
+
+table{
+    border-collapse: collapse; width:100%;
+}
+th,td{
+    border:1px solid #ccc; padding:10px; text-align:center;
+}
+th{
+    background:#f2f2f2;
+}
+.body{
+    font-family: 'Inter' sans-serif;
+}
+.action{
+    color: #ffffff;
+    border-color: #ddd7d7;
+    background: #ddd7d7;
+}
+.action:hover{
+    background:  #736b64;
+    color: #fff;
+    border-color: #736b64;
+}
+

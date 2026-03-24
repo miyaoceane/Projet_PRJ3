@@ -3,17 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link href="../asset/css/style.css" rel="stylesheet">
     <title>Réservation</title>
 </head>
-<body class= "container>
+<body>
+<header>
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    
+    <a class="navbar-brand" href="#">COIFFURE PRO</a>
+
+    <div class="d-flex align-items-center gap-3">
+      <a href="../index.php" class="btn btn-outline-success">Accueil</a>
+    </div>
+
+  </div>
+</nav>
+</header>
+<main class= "container">
 
 <?php
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 require_once('../Config/config.php');
-require_once('../INC/header.inc.php');
 
 
 $stmt_services = $pdo->query("SELECT id, nom, description, duree_minute, prix_euros FROM service ORDER BY nom");
@@ -147,7 +161,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <span class="error-message" id="err-service"></span>
                 </div>
 
-                <!-- Carte info service remplie par le JS -->
+                <!-- Carte info service  -->
                 <div id="info-card" class="info-card">
                     <p>Sélectionnez un service pour voir les disponibilités</p>
                 </div>
@@ -187,28 +201,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="mb-3">
                         <label for="nom">Nom :</label>
                         <input type="text" id="nom" name="nom"
-                               value="<?= htmlspecialchars($_POST['nom'] ?? '') ?>">
+                               value="<?= htmlspecialchars($_POST['nom'] ?? '') ?>" required>
                         <span class="error-message" id="err-nom"></span>
                     </div>
 
                     <div class="mb-3">
                         <label for="prenom">Prénom :</label>
                         <input type="text" id="prenom" name="prenom"
-                               value="<?= htmlspecialchars($_POST['prenom'] ?? '') ?>">
+                               value="<?= htmlspecialchars($_POST['prenom'] ?? '') ?>"required>
                         <span class="error-message" id="err-prenom"></span>
                     </div>
 
                     <div class="mb-3">
                         <label for="email">Email :</label>
                         <input type="email" id="email" name="email"
-                               value="<?= htmlspecialchars($_POST['email'] ?? '') ?>">
+                               value="<?= htmlspecialchars($_POST['email'] ?? '') ?>" required>
                         <span class="error-message" id="err-email"></span>
                     </div>
 
                     <div class="mb-3">
                         <label for="telephone">Téléphone :</label>
                         <input type="tel" id="telephone" name="telephone"
-                               value="<?= htmlspecialchars($_POST['telephone'] ?? '') ?>">
+                               value="<?= htmlspecialchars($_POST['telephone'] ?? '') ?>" required>
                         <span class="error-message" id="err-tel"></span>
                     </div>
 
@@ -228,11 +242,12 @@ $horaires_json     = json_encode($horaires);
 $reservations_json = json_encode($reservations_prises);
 ?>
 <script>
-    var HORAIRES_bdd    = <?= $horaires_json ?>;
+    var HORAIRES_BDD = <?= $horaires_json ?>;
     var RESERVATIONS_bdd = <?= $reservations_json ?>;
 </script>
 <script src="../asset/js/script.js"></script>
 
 <?php require_once('../INC/footer.inc.php'); ?>
+</main>
 </body>
 </html>
