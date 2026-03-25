@@ -31,6 +31,7 @@
   </div>
 </nav>
 </header>
+    <!-- NOM DU SALLON AVEC UNE IMAGE D'ACCUEIL -->
     <div class="acceuil">
         <div class='header-content'>
         <img class="card-img-top" src ="https://coiffurealimage.fr/wp-content/uploads/2018/03/img-salon-10.jpg" alt= "photo du sallon">
@@ -48,10 +49,13 @@
 
         <div class="container-service">
         <?php  
-        include_once('Config/config.php'); 
+        include_once('Config/config.php');
+        
+        //-- Récupération des services depuis la BDD
         $stm = $pdo -> query("SELECT nom, description, duree_minute, prix_euros, image FROM service");
         $services = $stm->fetchAll(PDO::FETCH_ASSOC);
-
+        
+        //-- Boucle pour afficher toutes les informations sous forme de card Bootstrap
         foreach($services as $service) {
             echo '<div class="card" style="width: 18rem;">';
             echo '<img src="' . $service['image'] . '" class="card-img-top" alt="...">';
@@ -84,6 +88,8 @@
                     <td><?= $jours[$d['jour_semaine']] ?></td>
                     <td><?= $d['actif'] ? substr($d['heure_debut'], 0, 5) : '—' ?></td>
                     <td><?= $d['actif'] ? substr($d['heure_fin'],   0, 5) : '—' ?></td>
+
+                    <!-- Ici après avoir récupérer les disponibilités depuis la BDD ,si actif on affiche les heures sinon on affiche un tiret "-"  -->
                 <?php endforeach; ?>
             </tbody>
         </table>
@@ -94,7 +100,7 @@
         <div class="container-avis">
             <div class="comments">
             <?php 
-            $comment = [
+            $comment = [ //TABLEAU DES COMMENTAIRES 
                 [
                     'nom' => 'Jean Dupont',
                     'commentaire' => 'Excellent service, je recommande vivement !'
@@ -116,7 +122,8 @@
                     'commentaire' =>'⭐⭐⭐⭐⭐ Service exceptionnel, je suis ravie de ma coupe !'
                 ]
             ];
-
+            
+            //-- AFFICHAGE DES COMMENTAIRES SUR LA PAGE --
             foreach ($comment as $c) {
                 echo '<div class="comment">';
                 echo '<h4>' . $c['nom'] . '</h4>';
