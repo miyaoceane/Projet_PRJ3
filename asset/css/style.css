@@ -447,14 +447,15 @@ transform: translateX(100%);      /* départ à droite */
     align-items: center;       /* aligne verticalement si éléments de hauteur différente */
     gap : 25px;
     background-color: #ebe8e8;
-    width: 1450px ;
+    width: 100% ;
     border-radius: 80px ;
 }
 
 .footer-container{
         display: flex;             /* active le mode flex */
          justify-content: space-between; /* espace entre les éléments */
-         align-items: center;      
+         align-items: center;
+         padding: 15px;      
 }
 
 
@@ -483,4 +484,5 @@ th{
     color: #fff;
     border-color: #736b64;
 }
+
 
