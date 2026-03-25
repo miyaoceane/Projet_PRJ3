@@ -1,5 +1,6 @@
 </div>
 </section>
+<!-- Footer réutilisé sur toutes les pages  -->
 
 <footer>
     <div class="footer-container">

@@ -1,5 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=Carattere&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Outfit:wght@100..900&display=swap');
+/* Il faut savoir que plusieurs classes ont été réutilisé par plusieurs pages pour maintenir un style cohérent  */
 
+
+/* police */
+@import url('https://fonts.googleapis.com/css2?family=Carattere&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Outfit:wght@100..900&display=swap');
 
 body {
     font-family: 'Inter', sans-serif;
@@ -18,6 +21,8 @@ body {
 h1, h2 {
     color: #2c2c2c;
 }
+
+/* PAGE DE RÉSERVATION */
 
 .sous-titre {
     color: #777;
@@ -282,6 +287,8 @@ input:focus, select:focus {
     }
 }
 
+/* PAGE ACCUEIL */
+
 .btn.btn-outline-success {
     color: #ffffff;
     border-color: #000000;
@@ -308,14 +315,14 @@ input:focus, select:focus {
 
 .container-service .card img {
     height: 200px;          /* hauteur fixe pour les images */
-    object-fit: cover;      /* conserve le ratio et crop si nécessaire */
+    object-fit: cover;      
 }
 
 
 .header-content {
     display: flex;
     align-items: center;
-    gap: 10px; /* espace très petit entre image et texte */
+    gap: 10px; 
 }
 
 .header-content img {
@@ -445,13 +452,13 @@ transform: translateX(100%);      /* départ à droite */
 }
 
 .footer-container{
-          display: flex;             /* active le mode flex */
+        display: flex;             /* active le mode flex */
          justify-content: space-between; /* espace entre les éléments */
          align-items: center;      
 }
 
 
-/* page de connexion et page Admin */
+/* PAGE DE CONNEXION ET PAGE ADMIN */
 
 table{
     border-collapse: collapse; width:100%;
@@ -464,6 +471,7 @@ th{
 }
 .body{
     font-family: 'Inter' sans-serif;
+    margin :15px;
 }
 .action{
     color: #ffffff;

@@ -8,6 +8,7 @@
     <title>Réservation</title>
 </head>
 <body>
+    <!---------------------  AFFICHAGE HTML(MENU DE NAVIGATION)  -------------------->
 <header>
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
@@ -29,18 +30,22 @@ error_reporting(E_ALL);
 
 require_once('../Config/config.php');
 
+//Récupérer les services
 
 $stmt_services = $pdo->query("SELECT id, nom, description, duree_minute, prix_euros FROM service ORDER BY nom");
 $services_list = $stmt_services->fetchAll();
 
+//Récupérer les réservations
 
 $stmt_res = $pdo->query("SELECT date_rdv, heure_rdv FROM reservation WHERE statut != 'annule'");
 $reservations_prises = [];
+
 while ($r = $stmt_res->fetch()) {
     $heure = substr($r['heure_rdv'], 0, 5); 
     $reservations_prises[] = $r['date_rdv'] . ' ' . $heure;
 }
 
+//Récupérer les disponibilités
 
 $stmt_dispos = $pdo->query("SELECT jour_semaine, heure_debut, heure_fin FROM disponibilites WHERE actif = 1");
 $horaires = [];
@@ -53,11 +58,18 @@ while ($d = $stmt_dispos->fetch()) {
     ];
 }
 
+//Vider les messages 
 
 $message      = '';
 $message_type = '';
 
+
+//-------  VÉRIFICATION DU FORMULAIRE CÔTÉ SERVEUR --------
+
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    // Nettoyer les valeurs récupérées dans les input
 
     $service_id = intval($_POST['service_id'] ?? 0);
     $date_rdv   = trim($_POST['date_rdv']   ?? '');
@@ -67,44 +79,94 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email      = trim($_POST['email']      ?? '');
     $telephone  = trim($_POST['telephone']  ?? '');
 
-    
     if (!$service_id || !$date_rdv || !$heure_rdv || !$nom || !$prenom || !$email || !$telephone) {
         $message      = 'Veuillez remplir tous les champs.';
         $message_type = 'danger';
+    //-- Vérification:Remplissage de tous les champs
 
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $message      = "L'adresse email n'est pas valide.";
         $message_type = 'danger';
+    //-- Vérification:Email
 
     } elseif (!preg_match('/^[0-9]{10}$/', $telephone)) {
         $message      = 'Le numéro de téléphone doit contenir 10 chiffres.';
         $message_type = 'danger';
+    //-- Vérification:telephone
 
     } elseif (strtotime($date_rdv) < strtotime('today')) {
         $message      = 'La date choisie est déjà passée.';
         $message_type = 'danger';
+    //-- Vérification:Eviter les confits concernant les réservations
 
     } else {
         
+        // On vérifie si le créneaux n'a pas déjà été réservé
+
+        // On récupère l'id de la reservation dont l'heure et la date corresponde à celle que vient de choisir l'utilisateur
         $check = $pdo->prepare(
             "SELECT id FROM reservation
              WHERE date_rdv = ? AND heure_rdv = ? AND statut != 'annule'"
         );
         $check->execute([$date_rdv, $heure_rdv]);
 
+        //-- On vérifie si l'id a pu être récupérer
+
         if ($check->fetch()) {
+            
+           //-- Envoie d'un message --
             $message      = 'Ce créneau est déjà réservé. Veuillez en choisir un autre.';
             $message_type = 'danger';
+
         } else {
             
+            //-- Insertion des informations dans la BDD --
             $insert = $pdo->prepare(
                 "INSERT INTO reservation
                  (service_id, date_rdv, heure_rdv, nom_client, prenom_client, email_client, telephone, statut)
                  VALUES (?, ?, ?, ?, ?, ?, ?, 'attente')"
             );
             $insert->execute([$service_id, $date_rdv, $heure_rdv, $nom, $prenom, $email, $telephone]);
+            
 
-           
+            //-- Envoie de l'email de confirmation --
+
+            $rq = $pdo->prepare("SELECT nom FROM service WHERE id = ?");
+            $rq->execute([$service_id]);
+            $service = $rq->fetch();
+            $nom_service = $service['nom'];
+
+            $sujet = "Confirmation de votre réservation";
+
+            $message = "
+            Bonjour $nom $prenom,
+
+            Votre réservation est confirmée.
+
+            Service : $nom_service
+            Date : $date_rdv
+            Heure : $heure_rdv
+
+            Merci et à bientôt.
+            Coiffure Pro
+            ";
+
+            $headers = "From: coiffurepro@gmail.com";
+
+            mail($email, $sujet, $message, $headers); // fonction mail() pour l'envoie des mails
+            
+            //-- Vérifier si Email a bien été envoyé --
+            if (mail($email, $sujet, $message, $headers)) {
+                $message= "Email envoyé";
+                $message_type = 'success';
+
+            } else {
+                $message = 'Erreur envoi email';
+                $message_type = 'danger';
+            }
+            
+            //-- Message de confirmation avec un récap de la réservation --
+
             $stmt_nom = $pdo->prepare("SELECT nom FROM service WHERE id = ?");
             $stmt_nom->execute([$service_id]);
             $nom_service = $stmt_nom->fetchColumn();
@@ -118,12 +180,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
+<!---------------------  AFFICHAGE HTML  -------------------->
 
 <div class="container text-center mt-5">
     <h1>Réservation en ligne</h1>
     <p class="sous-titre">Choisissez votre service et votre créneau</p>
 </div>
 
+<!-- Gerer les messages -->
 <?php if ($message): ?>
 <div class="container mt-3">
     <div class="alert alert-<?= $message_type ?>">
