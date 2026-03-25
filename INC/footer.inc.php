@@ -3,7 +3,7 @@
 <!-- Footer réutilisé sur toutes les pages  -->
 
 <footer>
-    <div class="footer-container">
+    <div class="footer-container" id="contact">
         <div>
             <p>COIFFURE PRO </p>
              <?= date('Y'); ?>

@@ -22,9 +22,9 @@
 
     <!-- Menu -->
     <div class="d-flex align-items-center gap-3">
-      <a class="nav-link" href="#">services</a>
-      <a class="nav-link" href="#">avis</a>
-      <a class="nav-link" href="#">Contact</a>
+      <a class="nav-link" href="#services">services</a>
+      <a class="nav-link" href="#avis">avis</a>
+      <a class="nav-link" href="#contact">Contact</a>
       <a href="./Pages/reservation.php" class="btn btn-outline-success">Réserver</a>
     </div>
 
@@ -44,7 +44,7 @@
    
     <main class="acceuil"> 
         
-        <div service class="service">
+        <div id ="services" class="service">
         <h2 >SERVICES</h2>
 
         <div class="container-service" style="overflow-x:auto">
@@ -95,7 +95,7 @@
         </table>
         </div>
          
-        <div class="avis">
+        <div id="avis"class="avis">
         <h2>AVIS</h2>
         <div class="container-avis">
             <div class="comments">
