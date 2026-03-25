@@ -175,6 +175,27 @@ INSERT INTO disponibilites (jour_semaine, heure_debut, heure_fin, actif) VALUES
 (0, '00:00:00', '00:00:00', 0);
 
 ```
+
+## Installation 
+
+ 1. Copier le projet dans le dossier htdocs (XAMPP ou équivalent)
+ 2.Créer une base de données (ex : Sallon_coiffure)
+ 3.Importer le fichier database/Sallon_coiffure.sql
+ 4.Modifier config/config.php avec vos identifiants :
+
+```php
+    $host = "localhost";
+    $dbname = "Sallon_coiffure";
+    $user = "root";
+    $password = "";
+```
+
+Lancer le site via navigateur :
+```
+    http://localhost/Projet_PRJ3
+```
+
+
 ## Sécurité
 - htmlspecialchars() pour protéger contre XSS
 - intval() pour sécuriser les nombres
