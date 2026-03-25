@@ -484,5 +484,17 @@ th{
     color: #fff;
     border-color: #736b64;
 }
+.badge-ok {
+    background-color: #d4edda;
+    color: black;
+}
 
+.badge-no {
+    background-color: #f8d7da;
+    color: black;
+}
 
+.badge-wait {
+    background-color: #fff3cd;
+    color: black;
+}
