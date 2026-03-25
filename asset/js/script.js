@@ -1,16 +1,17 @@
 document.addEventListener('DOMContentLoaded', function() {
 
-    
+   // TABLEAU POUR LES MOIS
     const MOIS = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-
-    
+ 
+    //-- Fonction pour Convertir les heures en valeur decimal
     function hToDecimal(heureStr) {
         var parts = heureStr.split(':');
         return parseInt(parts[0]) + parseInt(parts[1]) / 60;
     }
 
+    //-- On récupère les horraires de disponibilités en BDD
     var HORAIRES = {};
     for (var jour in HORAIRES_BDD) {
         HORAIRES[jour] = [];
@@ -21,7 +22,8 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     }
-
+    
+    //-- On récupère la date et l'heure des réservations
     var RESERVATIONS = {};
     for (var r = 0; r < RESERVATIONS_bdd.length; r++) {
         var parts = RESERVATIONS_bdd[r].split(' ');
@@ -31,6 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
         RESERVATIONS[date] = [];
         RESERVATIONS[date].push(heure);
         }
+    // l'heure est stockée dans la liste RESERVATIONS[date] tandis que que la liste RESERVATIONS[date] est stockée dans l'objet RESERVATIONS
     }
 
     var anneeAff = today.getFullYear();
@@ -39,8 +42,8 @@ document.addEventListener('DOMContentLoaded', function() {
     var selSlot  = null;
     var selDur   = 0;
 
-    
 
+    //-- Convertir les dates en chaînes de carractères
     function dateStr(d) {
         
         var mm = String(d.getMonth() + 1).padStart(2, '0');
@@ -48,6 +51,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return d.getFullYear() + '-' + mm + '-' + dd;
     }
 
+    //Fonction pour calculer les créneaux
     function getCreneaux(date, duree_Min) {
         var day = date.getDay(); 
         var plages = HORAIRES[day] || [];
@@ -59,36 +63,39 @@ document.addEventListener('DOMContentLoaded', function() {
                 var hh = Math.floor(h);
                 var mm = Math.round((h - hh) * 60);
                 slots.push(String(hh).padStart(2, '0') + ':' + String(mm).padStart(2, '0'));
-                h += 0.5; 
+                h += duree_Min / 60; 
             }
         }
         return slots;
     }
 
-
+//Fonction pour afficher le calendrier 
     function afficherCalendrier() {
         document.getElementById('cal-title').textContent = MOIS[moisAff] + ' ' + anneeAff;
         var premier = new Date(anneeAff, moisAff, 1);
         var decalage = premier.getDay();
         decalage = (decalage === 0) ? 6 : decalage - 1; // lundi = 0
-        var nbJours = new Date(anneeAff, moisAff + 1, 0).getDate();
+        var nbJours = new Date(anneeAff, moisAff + 1, 0).getDate(); // Nombre de jours du mois
         var grille = document.getElementById('cal-grid');
-        grille.innerHTML = '';
-
+        grille.innerHTML = ''; //on vide la grille pour le prochain affichage
+        
+        //Les jours qui n'appartiennent pas au mois
         for (var i = 0; i < decalage; i++) {
             var vide = document.createElement('button');
             vide.type = 'button';
             vide.className = 'day-btn empty';
             grille.appendChild(vide);
         }
-
+        
+        //Les jours qui appartiennent au mois 
         for (var j = 1; j <= nbJours; j++) {
             var dt = new Date(anneeAff, moisAff, j);
             var btn = document.createElement('button');
             btn.type = 'button';
             btn.className = 'day-btn';
             btn.textContent = j;
-
+            
+            // dt jour sélectionné
             var estPasse  = dt < today;
             var day = dt.getDay();
             var estFerme  = !HORAIRES[day] || HORAIRES[day].length === 0;
@@ -96,7 +103,7 @@ document.addEventListener('DOMContentLoaded', function() {
             var k = dateStr(dt);
             var slots  = getCreneaux(dt, selDur || 30);
             var pris   = RESERVATIONS[k] || [];
-            var libres = slots.filter(function(s) { return pris.indexOf(s) === -1; });
+            var libres = slots.filter(function(s) { return pris.indexOf(s) === -1; });// Récupérer le créneau qui n'est pas dans les réservations
 
             if (estAujourd) btn.classList.add('today');
             if (estPasse)   btn.classList.add('past');
@@ -109,13 +116,13 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!estPasse && !estFerme) {
                 (function(date) {
                     btn.addEventListener('click', function() { choisirDate(date); });
-                })(dt);
+                })(dt);//
             }
 
             grille.appendChild(btn);
         }
     }
-
+   
     function choisirDate(dt) {
         selDate = dt;
         selSlot = null;
@@ -124,7 +131,7 @@ document.addEventListener('DOMContentLoaded', function() {
         afficherCalendrier();
 
         var dur   = selDur || 30;
-        var slots = getCreneaux(dt, dur);
+        var slots = getCreneaux(dt, dur);// obtenir les créneaux de la date choisis
         var pris  = RESERVATIONS[dateStr(dt)] || [];
 
         document.getElementById('slots-label').textContent =
@@ -132,7 +139,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         var grille = document.getElementById('slots-grid');
         grille.innerHTML = '';
-
+        
+        // Vérification: Présence de créneaux
         if (slots.length === 0) {
             grille.innerHTML = '<p>Aucun créneau disponible ce jour.</p>';
         } 
@@ -152,12 +160,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 grille.appendChild(b);
             });
         }
-
+        //Affichage des des créneaux cachés depuis le fichier reservation.php
         document.getElementById('slots-section').style.display = 'block';
         document.getElementById('form-client').style.display = 'none';
         document.getElementById('err-date').textContent = '';
     }
 
+//Fonction pour choisir le creneaux    
     function choisirCreneau(s, btnClique) {
         selSlot = s;
         document.querySelectorAll('.slot-btn').forEach(function(b) {
@@ -173,17 +182,19 @@ document.addEventListener('DOMContentLoaded', function() {
         var opt = sel.options[sel.selectedIndex];
         var nomService = opt.text.split('—')[0].trim();
 
+        //Recap
         document.getElementById('confirm-info').innerHTML =
             '<strong>' + nomService + '</strong> — ' +
             selDate.toLocaleDateString('fr-FR', {weekday:'long', day:'numeric', month:'long'}) +
             ' à ' + s + ' — ' + opt.getAttribute('data-prix') + '€';
 
+        // Affichage du formulaire client et du bouton de confirmation depuis le fichier php
         document.getElementById('confirm-bar').style.display = 'block';
         document.getElementById('form-client').style.display = 'block';
-        document.getElementById('err-slot').textContent = '';
+        document.getElementById('err-slot').textContent = '';// vider les expaces de messages
     }
 
-
+//--- Boutons pour changer le mois et l'année dans le calendrier ---
 
     document.getElementById('prev-btn').addEventListener('click', function() {
         moisAff--;
@@ -198,7 +209,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 
-
+//Dans le cas où on change de service :
     document.getElementById('service').addEventListener('change', function() {
         var opt = this.options[this.selectedIndex];
         if (opt.value) {
@@ -213,6 +224,8 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('info-card').innerHTML = '<p>Sélectionnez un service pour voir les disponibilités</p>';
             document.getElementById('cal-section').style.display = 'none';
         }
+
+        //Cacher de nouveau tout ce qui a été afficher 
         selDate = null;
         selSlot = null;
         document.getElementById('slots-section').style.display = 'none';
@@ -222,10 +235,12 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('heure_rdv').value = '';
         afficherCalendrier();
     });
-
+ 
 
     document.getElementById('reservationForm').addEventListener('submit', function(e) {
         var valide = true;
+
+        //--Vérification:Est ce que le client a donné toutes ces informations? dans le cas contraire le formulaire n'est pas validé 
 
         if (!document.getElementById('date_rdv').value) {
             document.getElementById('err-date').textContent = 'Veuillez choisir une date.';
@@ -240,7 +255,12 @@ document.addEventListener('DOMContentLoaded', function() {
             valide = false;
         }
 
-       
+ 
+        
+        //-- VALIDATION DU FORMULAIRE CLIENT --
+
+
+
         var champsTxt = ['nom', 'prenom'];
         champsTxt.forEach(function(id) {
             var input = document.getElementById(id);
