@@ -89,7 +89,6 @@ Le client reçoit un email avec :
 - la date
 - l’heure
 - son nom
-- un message de confirmation
 
 
   ## 5. Interface d’administration
