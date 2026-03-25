@@ -131,39 +131,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             //-- Envoie de l'email de confirmation --
 
-            $rq = $pdo->prepare("SELECT nom FROM service WHERE id = ?");
-            $rq->execute([$service_id]);
-            $service = $rq->fetch();
-            $nom_service = $service['nom'];
+            //$rq = $pdo->prepare("SELECT nom FROM service WHERE id = ?");
+            //$rq->execute([$service_id]);
+            // $service = $rq->fetch();
+            // $nom_service = $service['nom'];
 
-            $sujet = "Confirmation de votre réservation";
+            // $sujet = "Confirmation de votre réservation";
 
-            $message = "
-            Bonjour $nom $prenom,
+            // $message = "
+            // Bonjour $nom $prenom,
 
-            Votre réservation est confirmée.
+            // Votre réservation est confirmée.
 
-            Service : $nom_service
-            Date : $date_rdv
-            Heure : $heure_rdv
+            // Service : $nom_service
+            // Date : $date_rdv
+            // Heure : $heure_rdv
 
-            Merci et à bientôt.
-            Coiffure Pro
-            ";
+            // Merci et à bientôt.
+            // Coiffure Pro
+            // ";
 
-            $headers = "From: coiffurepro@gmail.com";
+            // $headers = "From: coiffurepro@gmail.com";
 
-            mail($email, $sujet, $message, $headers); // fonction mail() pour l'envoie des mails
+            // mail($email, $sujet, $message, $headers); // fonction mail() pour l'envoie des mails
             
-            //-- Vérifier si Email a bien été envoyé --
-            if (mail($email, $sujet, $message, $headers)) {
-                $message= "Email envoyé";
-                $message_type = 'success';
+            // //-- Vérifier si Email a bien été envoyé --
+            // if (mail($email, $sujet, $message, $headers)) {
+            //     $message= "Email envoyé";
+            //     $message_type = 'success';
 
-            } else {
-                $message = 'Erreur envoi email';
-                $message_type = 'danger';
-            }
+            // } else {
+            //     $message = 'Erreur envoi email';
+            //     $message_type = 'danger';
+            // }
             
             //-- Message de confirmation avec un récap de la réservation --
 

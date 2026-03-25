@@ -47,7 +47,7 @@
         <div service class="service">
         <h2 >SERVICES</h2>
 
-        <div class="container-service">
+        <div class="container-service" style="overflow-x:auto">
         <?php  
         include_once('Config/config.php');
         
